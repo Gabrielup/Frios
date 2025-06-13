@@ -1,0 +1,94 @@
+services:
+  www:
+    build: .
+    ports:
+      - "82:80"
+    volumes:
+      - ./public:/var/www/html/
+    depends_on:
+      - db
+    networks:
+    - default
+  db:
+    image: mariadb:noble
+    expose:
+      - "3306"
+    environment:
+      MYSQL_DATABASE: universidad
+      MYSQL_USER: user1
+      MYSQL_PASSWORD: user1.pa55
+      MYSQL_ROOT_PASSWORD: root.pa55
+    volumes:
+      - ./base_datos:/docker-entrypoint-initdb.d
+      - ./mysql-data:/var/lib/mysql
+    networks:
+      - default
+  phpmyadmin:
+    image: phpmyadmin:latest
+    
+    depends_on:
+      - db
+    ports:
+      - "8082:80"
+    environment:
+      MYSQL_USER: user1
+      MYSQL_PASSWORD: user1.pa55
+      MYSQL_ROOT_PASSWORD: root.pa55
+    networks:
+      - default
+
+  frio1:
+    image: alpine:3.22
+    networks:
+      - red-frio
+    command: tail -f /dev/null
+
+  frio2:
+    image: alpine:3.22
+    networks:
+      - red-frio
+    command: tail -f /dev/null
+
+  frio3:
+    image: alpine:3.22
+    networks:
+      - red-frio
+    command: tail -f /dev/null
+
+  frio4:
+    image: alpine:3.22
+    networks:
+      - red-frio
+    command: tail -f /dev/null
+
+  cal1:
+    image: alpine:3.22
+    networks:
+      - red-caliente
+    command: tail -f /dev/null
+
+  cal2:
+    image: alpine:3.22
+    networks:
+      - red-caliente
+    command: tail -f /dev/null
+
+  cal3:
+    image: alpine:3.22
+    networks:
+      - red-caliente
+    command: tail -f /dev/null
+
+  cal4:
+    image: alpine:3.22
+    networks:
+      - red-caliente
+    command: tail -f /dev/null
+
+networks:
+  default:
+    driver: bridge
+  red-frio:
+    driver: bridge
+  red-caliente:
+    driver: bridge
